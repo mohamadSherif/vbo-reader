@@ -1,4 +1,37 @@
 import { VBOReader, VBOParserError } from '../src';
+import { parseCreationDate } from '../src/parser/utils';
+import { describe, expect, it } from '@jest/globals';
+
+describe('Utils', () => {
+  describe('parseCreationDate', () => {
+    it('should parse standard date format', () => {
+      const date = parseCreationDate('File created on 31/07/2006 at 09:55:20');
+      expect(date).toBeInstanceOf(Date);
+      expect(date.getFullYear()).toBe(2006);
+      expect(date.getMonth()).toBe(6); // July is 6 (zero-based)
+      expect(date.getDate()).toBe(31);
+      expect(date.getHours()).toBe(9);
+      expect(date.getMinutes()).toBe(55);
+      expect(date.getSeconds()).toBe(20);
+    });
+
+    it('should parse new date format', () => {
+      const date = parseCreationDate('File created on 20250216-163155');
+      expect(date).toBeInstanceOf(Date);
+      expect(date.getFullYear()).toBe(2025);
+      expect(date.getMonth()).toBe(1); // February is 1 (zero-based)
+      expect(date.getDate()).toBe(16);
+      expect(date.getHours()).toBe(16);
+      expect(date.getMinutes()).toBe(31);
+      expect(date.getSeconds()).toBe(55);
+    });
+
+    it('should throw error for invalid date format', () => {
+      expect(() => parseCreationDate('File created on invalid date'))
+        .toThrow('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss or YYYYMMDD-HHMMSS');
+    });
+  });
+});
 
 const sampleVBOContent = `File created on 31/07/2006 at 09:55:20
 

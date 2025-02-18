@@ -1,3 +1,5 @@
+/// <reference types="node" />
+/// <reference types="node" />
 import { ParsedVBOFile, ParserOptions } from './types';
 export * from './types';
 export declare class VBOReader {

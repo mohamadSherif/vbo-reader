@@ -53,23 +53,42 @@ export function parseInputChannel(value: string): number {
 
 /**
  * Extracts the creation date from the VBO file header
+ * Supports formats:
+ * - DD/MM/YYYY at HH:mm:ss
+ * - YYYYMMDD-HHMMSS
  * @param line Header line containing the date
  * @returns Date object
  */
 export function parseCreationDate(line: string): Date {
-  const match = line.match(/(\d{2})\/(\d{2})\/(\d{4})\s+at\s+(\d{2}):(\d{2}):(\d{2})/);
-  if (!match) {
-    throw new Error('Invalid creation date format');
+  // Try standard format (DD/MM/YYYY at HH:mm:ss)
+  let match = line.match(/(\d{2})\/(\d{2})\/(\d{4})\s+at\s+(\d{2}):(\d{2}):(\d{2})/);
+  if (match) {
+    const [, day, month, year, hours, minutes, seconds] = match;
+    return new Date(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      parseInt(hours),
+      parseInt(minutes),
+      parseInt(seconds)
+    );
   }
-  const [, day, month, year, hours, minutes, seconds] = match;
-  return new Date(
-    parseInt(year),
-    parseInt(month) - 1,
-    parseInt(day),
-    parseInt(hours),
-    parseInt(minutes),
-    parseInt(seconds)
-  );
+
+  // Try new format (YYYYMMDD-HHMMSS)
+  match = line.match(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})/);
+  if (match) {
+    const [, year, month, day, hours, minutes, seconds] = match;
+    return new Date(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      parseInt(hours),
+      parseInt(minutes),
+      parseInt(seconds)
+    );
+  }
+
+  throw new Error('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss or YYYYMMDD-HHMMSS');
 }
 
 /**

@@ -29,6 +29,9 @@ export declare function parseTime(time: string): string;
 export declare function parseInputChannel(value: string): number;
 /**
  * Extracts the creation date from the VBO file header
+ * Supports formats:
+ * - DD/MM/YYYY at HH:mm:ss
+ * - YYYYMMDD-HHMMSS
  * @param line Header line containing the date
  * @returns Date object
  */
