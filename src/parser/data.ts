@@ -56,7 +56,7 @@ export class DataParser {
 
         case 'lat':
           if (this.options.convertCoordinates) {
-            row.latitude = convertCoordinate(value.slice(1), value.startsWith('+'));
+            row.latitude = convertCoordinate(value.slice(1), value.startsWith('+'), true);
           } else {
             row.latitude = parseFloat(value);
           }
@@ -64,7 +64,7 @@ export class DataParser {
 
         case 'long':
           if (this.options.convertCoordinates) {
-            row.longitude = convertCoordinate(value.slice(1), value.startsWith('+'));
+            row.longitude = convertCoordinate(value.slice(1), value.startsWith('+'), false);
           } else {
             row.longitude = parseFloat(value);
           }

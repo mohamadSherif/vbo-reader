@@ -1,15 +1,25 @@
 /**
- * Converts VBOX latitude/longitude format (MMMMM.MMMMM) to decimal degrees
+ * Converts VBOX latitude/longitude format (MMMMM.MMMMM) to degrees with cardinal direction
  * @param coordinate Coordinate in VBOX format (e.g., "03119.09973")
- * @param isPositive Whether the coordinate is positive (North/West)
- * @returns Coordinate in decimal degrees
+ * @param isPositive Whether the coordinate is positive (North/East)
+ * @param isLatitude Whether this is a latitude coordinate (true) or longitude (false)
+ * @returns Coordinate in degrees with cardinal direction (e.g., "31°19.09973'N")
  */
-export function convertCoordinate(coordinate: string, isPositive: boolean): number {
-  const absValue = Math.abs(parseFloat(coordinate));
-  const degrees = Math.floor(absValue / 60);
-  const minutes = absValue % 60;
-  const decimalDegrees = degrees + (minutes / 60);
-  return isPositive ? decimalDegrees : -decimalDegrees;
+export function convertCoordinate(coordinate: string, isPositive: boolean, isLatitude: boolean): string {
+  const value = parseFloat(coordinate);
+  const degrees = Math.floor(value / 100);
+  const minutes = value % 100;
+  
+  // Determine cardinal direction
+  const direction = isLatitude
+    ? (isPositive ? 'N' : 'S')
+    : (isPositive ? 'E' : 'W');
+  
+  // Format with degree symbol and minutes (pad integer part to 2 digits)
+  const minutesInt = Math.floor(minutes);
+  const minutesDec = minutes % 1;
+  const minutesStr = `${minutesInt.toString().padStart(2, '0')}${minutesDec.toFixed(5).slice(1)}`;
+  return `${degrees}°${minutesStr}'${direction}`;
 }
 
 /**

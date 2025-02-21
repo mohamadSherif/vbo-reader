@@ -1,10 +1,11 @@
 /**
- * Converts VBOX latitude/longitude format (MMMMM.MMMMM) to decimal degrees
+ * Converts VBOX latitude/longitude format (MMMMM.MMMMM) to degrees with cardinal direction
  * @param coordinate Coordinate in VBOX format (e.g., "03119.09973")
- * @param isPositive Whether the coordinate is positive (North/West)
- * @returns Coordinate in decimal degrees
+ * @param isPositive Whether the coordinate is positive (North/East)
+ * @param isLatitude Whether this is a latitude coordinate (true) or longitude (false)
+ * @returns Coordinate in degrees with cardinal direction (e.g., "31°19.09973'N")
  */
-export declare function convertCoordinate(coordinate: string, isPositive: boolean): number;
+export declare function convertCoordinate(coordinate: string, isPositive: boolean, isLatitude: boolean): string;
 /**
  * Parses satellite information from VBOX format
  * @param value Satellite value from VBO file

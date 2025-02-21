@@ -21,8 +21,8 @@ export interface VBODataRow {
     brakeTrigger: boolean;
   };
   time: string;
-  latitude: number;
-  longitude: number;
+  latitude: number | string;
+  longitude: number | string;
   velocity: number | string;
   heading: number | string;
   height: number | string;

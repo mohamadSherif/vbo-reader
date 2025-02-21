@@ -17,8 +17,12 @@
     "data",
     "gps"
   ],
-  "author": "",
+  "author": "Mohamad Sherif",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamadSherif/vbo-reader.git"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^18.15.0",
