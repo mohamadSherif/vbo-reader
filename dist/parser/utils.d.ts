@@ -3,7 +3,7 @@
  * @param coordinate Coordinate in VBOX format (e.g., "03119.09973")
  * @param isPositive Whether the coordinate is positive (North/East)
  * @param isLatitude Whether this is a latitude coordinate (true) or longitude (false)
- * @returns Coordinate in degrees with cardinal direction (e.g., "31°19.09973'N")
+ * @returns Coordinate in degrees with cardinal direction (e.g., "31°19'5.9838\"N")
  */
 export declare function convertCoordinate(coordinate: string, isPositive: boolean, isLatitude: boolean): string;
 /**

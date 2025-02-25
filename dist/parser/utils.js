@@ -6,21 +6,19 @@ exports.extractValue = exports.isEmptyLine = exports.splitLine = exports.parseCr
  * @param coordinate Coordinate in VBOX format (e.g., "03119.09973")
  * @param isPositive Whether the coordinate is positive (North/East)
  * @param isLatitude Whether this is a latitude coordinate (true) or longitude (false)
- * @returns Coordinate in degrees with cardinal direction (e.g., "31°19.09973'N")
+ * @returns Coordinate in degrees with cardinal direction (e.g., "31°19'5.9838\"N")
  */
 function convertCoordinate(coordinate, isPositive, isLatitude) {
+    // Parse the coordinate value
     const value = parseFloat(coordinate);
-    const degrees = Math.floor(value / 100);
-    const minutes = value % 100;
+    // Convert total minutes to degrees, minutes and seconds
+    const degrees = Math.floor(value / 60);
+    const remainingMinutes = value % 60;
+    const minutesInt = Math.floor(remainingMinutes);
+    const seconds = ((remainingMinutes - minutesInt) * 60).toFixed(2);
     // Determine cardinal direction
-    const direction = isLatitude
-        ? (isPositive ? 'N' : 'S')
-        : (isPositive ? 'E' : 'W');
-    // Format with degree symbol and minutes (pad integer part to 2 digits)
-    const minutesInt = Math.floor(minutes);
-    const minutesDec = minutes % 1;
-    const minutesStr = `${minutesInt.toString().padStart(2, '0')}${minutesDec.toFixed(5).slice(1)}`;
-    return `${degrees}°${minutesStr}'${direction}`;
+    const direction = isLatitude ? (isPositive ? 'N' : 'S') : (isPositive ? 'W' : 'E');
+    return `${degrees}°${minutesInt}'${seconds}"${direction}`;
 }
 exports.convertCoordinate = convertCoordinate;
 /**

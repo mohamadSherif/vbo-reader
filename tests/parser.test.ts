@@ -8,13 +8,12 @@ describe('Utils', () => {
       const { convertCoordinate } = require('../src/parser/utils');
       
       // Test latitude cases
-      expect(convertCoordinate('3936.0006', true, true)).toBe('39°36.00060\'N');
-      expect(convertCoordinate('2361.600342', true, true)).toBe('23°61.60034\'N');
-      expect(convertCoordinate('3936.0006', false, true)).toBe('39°36.00060\'S');
+      expect(convertCoordinate('2361.600342', true, true)).toBe('39°21\'36.02"N');
+      expect(convertCoordinate('02700.56963', true, true)).toBe('45°0\'34.18"N');
       
       // Test longitude cases
-      expect(convertCoordinate('07507.1925', false, false)).toBe('75°07.19250\'W');
-      expect(convertCoordinate('04504.315506', true, false)).toBe('45°04.31551\'E');
+      expect(convertCoordinate('04504.315506', true, false)).toBe('75°4\'18.93"W');
+      expect(convertCoordinate('005571.57815', true, false)).toBe('92°51\'34.69"W');
     });
   });
 
@@ -112,8 +111,8 @@ describe('VBOReader', () => {
         brakeTrigger: false,
       });
       expect(firstRow.time).toBe('16:22:35.40');
-      expect(firstRow.latitude).toBe('31°19.09973\'N');
-      expect(firstRow.longitude).toBe('0°58.49277\'E');
+      expect(firstRow.latitude).toBe('51°59\'5.98"N');
+      expect(firstRow.longitude).toBe('0°58\'29.57"W');
       expect(firstRow.velocity).toBe(0.14);
       expect(firstRow.heading).toBe(321.85);
       expect(firstRow.height).toBe(152.58);
