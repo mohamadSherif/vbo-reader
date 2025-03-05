@@ -53,6 +53,7 @@ class DataParser {
                     }
                     break;
                 case 'long':
+                case 'lng':
                     if (this.options.convertCoordinates) {
                         row.longitude = (0, utils_1.convertCoordinate)(value.slice(1), value.startsWith('+'), false);
                     }

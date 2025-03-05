@@ -63,6 +63,7 @@ export class DataParser {
           break;
 
         case 'long':
+        case 'lng':
           if (this.options.convertCoordinates) {
             row.longitude = convertCoordinate(value.slice(1), value.startsWith('+'), false);
           } else {
