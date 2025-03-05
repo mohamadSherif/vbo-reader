@@ -33,6 +33,7 @@ export declare function parseInputChannel(value: string): number;
  * Supports formats:
  * - DD/MM/YYYY at HH:mm:ss
  * - YYYYMMDD-HHMMSS
+ * - DD/MM/YYYY @ HH:mm
  * @param line Header line containing the date
  * @returns Date object
  */

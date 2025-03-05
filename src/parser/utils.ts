@@ -65,6 +65,7 @@ export function parseInputChannel(value: string): number {
  * Supports formats:
  * - DD/MM/YYYY at HH:mm:ss
  * - YYYYMMDD-HHMMSS
+ * - DD/MM/YYYY @ HH:mm
  * @param line Header line containing the date
  * @returns Date object
  */
@@ -97,7 +98,21 @@ export function parseCreationDate(line: string): Date {
     );
   }
 
-  throw new Error('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss or YYYYMMDD-HHMMSS');
+  // Try format (DD/MM/YYYY @ HH:mm)
+  match = line.match(/(\d{2})\/(\d{2})\/(\d{4})\s+@\s+(\d{2}):(\d{2})/);
+  if (match) {
+    const [, day, month, year, hours, minutes] = match;
+    return new Date(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      parseInt(hours),
+      parseInt(minutes),
+      0 // Seconds are not provided in this format, default to 0
+    );
+  }
+
+  throw new Error('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss, YYYYMMDD-HHMMSS, or DD/MM/YYYY @ HH:mm');
 }
 
 /**

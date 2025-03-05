@@ -42,7 +42,7 @@ describe('Utils', () => {
 
     it('should throw error for invalid date format', () => {
       expect(() => parseCreationDate('File created on invalid date'))
-        .toThrow('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss or YYYYMMDD-HHMMSS');
+        .toThrow('Invalid creation date format. Expected DD/MM/YYYY at HH:mm:ss, YYYYMMDD-HHMMSS, or DD/MM/YYYY @ HH:mm');
     });
   });
 });

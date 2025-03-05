@@ -1,0 +1,32 @@
+File created on 22/01/2023 @ 03:11
+
+[header]
+satellites
+time
+latitude
+longitude
+velocity kmh
+heading
+height
+vertical velocity kmh
+trigger event time in clock counts
+
+[channel units]
+
+[comments]
+(c) 2001 2023 Racelogic
+VBox II Version 5.0
+GPS : SSX3g
+Serial Number : 005202
+CF Version 3.0
+Log Rate (Hz) : 10.00
+Software Version : 2.0.0 (Build 010)
+Security Code : %//+$%00"0/0+
+
+[column names]
+sats time lat long velocity heading height vertvel event1
+
+[data]
+137 162235.40 +03119.09973 +00058.49277 000.140 321.85 +00152.58 +000.000 00000
+137 162235.90 +03119.09973 +00058.49277 000.220 065.93 +00152.58 +000.000 00000
+137 162236.40 +03119.09973 +00058.49277 000.250 356.43 +00152.59 000.072 00000
