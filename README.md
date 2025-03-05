@@ -13,6 +13,7 @@ npm install vbo-reader
 - Full TypeScript support with type definitions
 - Parse VBO file headers and data
 - Convert coordinates to decimal degrees
+- Parse lap timing information with start/finish coordinates
 - Handle raw data mode for preserving original string values
 - Support for both synchronous and asynchronous file reading
 - Comprehensive error handling
@@ -78,6 +79,21 @@ interface VBOHeader {
   channelUnits?: string[];
   comments: string[];
   securityCode?: string;
+  lapTiming?: LapTimingPoint[]; // Lap timing information
+}
+
+// Lap timing point structure
+interface LapTimingPoint {
+  label: string;
+  startCoordinates: {
+    latitude: string;
+    longitude: string;
+  };
+  endCoordinates: {
+    latitude: string;
+    longitude: string;
+  };
+  description?: string;
 }
 
 // Data row structure

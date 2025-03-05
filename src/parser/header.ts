@@ -1,5 +1,5 @@
-import { VBOHeader, VBOParserError } from '../types';
-import { parseCreationDate, extractValue, isEmptyLine } from './utils';
+import { VBOHeader, VBOParserError, LapTimingPoint } from '../types';
+import { parseCreationDate, extractValue, isEmptyLine, convertCoordinate } from './utils';
 
 export class HeaderParser {
   private lines: string[];
@@ -28,6 +28,7 @@ export class HeaderParser {
       channelUnits: [],
       comments: [],
       securityCode: undefined,
+      lapTiming: [],
     };
 
     while (this.currentIndex < this.lines.length) {
@@ -43,6 +44,8 @@ export class HeaderParser {
         this.parseComments(header);
       } else if (line === '[column names]') {
         header.columnNames = this.parseColumnNames();
+      } else if (line === '[laptiming]') {
+        header.lapTiming = this.parseLapTiming();
       }
 
       this.currentIndex++;
@@ -50,6 +53,61 @@ export class HeaderParser {
 
     this.validateHeader(header);
     return header;
+  }
+
+  /**
+   * Parses the laptiming section of the VBO file
+   * @returns Array of lap timing points
+   */
+  private parseLapTiming(): LapTimingPoint[] {
+    this.currentIndex++; // Skip [laptiming] line
+    const lapTimingPoints: LapTimingPoint[] = [];
+
+    while (this.currentIndex < this.lines.length) {
+      const line = this.lines[this.currentIndex].trim();
+      if (isEmptyLine(line) || line.startsWith('[')) break;
+
+      // Parse the lap timing line
+      // Format: Label +LatStart +LngStart +LatEnd +LngEnd ¬ Description
+      const parts = line.split(/\s+/);
+      
+      if (parts.length >= 5) {
+        const label = parts[0];
+        
+        // Extract coordinates
+        const latStart = parts[1];
+        const lngStart = parts[2];
+        const latEnd = parts[3];
+        const lngEnd = parts[4];
+        
+        // Extract description (everything after the coordinates)
+        let description = '';
+        if (parts.length > 5) {
+          // Join all remaining parts, skipping any special characters like ¬
+          description = parts.slice(5).join(' ').replace(/[¬]/g, '').trim();
+        }
+
+        // Create lap timing point
+        const lapTimingPoint: LapTimingPoint = {
+          label,
+          startCoordinates: {
+            latitude: convertCoordinate(latStart.slice(1), latStart.startsWith('+'), true),
+            longitude: convertCoordinate(lngStart.slice(1), !lngStart.startsWith('+'), false),
+          },
+          endCoordinates: {
+            latitude: convertCoordinate(latEnd.slice(1), latEnd.startsWith('+'), true),
+            longitude: convertCoordinate(lngEnd.slice(1), !lngEnd.startsWith('+'), false),
+          },
+          description: description || undefined,
+        };
+
+        lapTimingPoints.push(lapTimingPoint);
+      }
+
+      this.currentIndex++;
+    }
+
+    return lapTimingPoints;
   }
 
   private parseHeaderSection(header: VBOHeader): void {

@@ -8,6 +8,11 @@ export declare class HeaderParser {
      * @returns Parsed header information
      */
     parse(): VBOHeader;
+    /**
+     * Parses the laptiming section of the VBO file
+     * @returns Array of lap timing points
+     */
+    private parseLapTiming;
     private parseHeaderSection;
     private parseChannelUnits;
     private parseComments;

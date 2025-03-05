@@ -27,6 +27,7 @@ class HeaderParser {
             channelUnits: [],
             comments: [],
             securityCode: undefined,
+            lapTiming: [],
         };
         while (this.currentIndex < this.lines.length) {
             const line = this.lines[this.currentIndex].trim();
@@ -45,10 +46,59 @@ class HeaderParser {
             else if (line === '[column names]') {
                 header.columnNames = this.parseColumnNames();
             }
+            else if (line === '[laptiming]') {
+                header.lapTiming = this.parseLapTiming();
+            }
             this.currentIndex++;
         }
         this.validateHeader(header);
         return header;
+    }
+    /**
+     * Parses the laptiming section of the VBO file
+     * @returns Array of lap timing points
+     */
+    parseLapTiming() {
+        this.currentIndex++; // Skip [laptiming] line
+        const lapTimingPoints = [];
+        while (this.currentIndex < this.lines.length) {
+            const line = this.lines[this.currentIndex].trim();
+            if ((0, utils_1.isEmptyLine)(line) || line.startsWith('['))
+                break;
+            // Parse the lap timing line
+            // Format: Label +LatStart +LngStart +LatEnd +LngEnd ¬ Description
+            const parts = line.split(/\s+/);
+            if (parts.length >= 5) {
+                const label = parts[0];
+                // Extract coordinates
+                const latStart = parts[1];
+                const lngStart = parts[2];
+                const latEnd = parts[3];
+                const lngEnd = parts[4];
+                // Extract description (everything after the coordinates)
+                let description = '';
+                if (parts.length > 5) {
+                    // Join all remaining parts, skipping any special characters like ¬
+                    description = parts.slice(5).join(' ').replace(/[¬]/g, '').trim();
+                }
+                // Create lap timing point
+                const lapTimingPoint = {
+                    label,
+                    startCoordinates: {
+                        latitude: (0, utils_1.convertCoordinate)(latStart.slice(1), latStart.startsWith('+'), true),
+                        longitude: (0, utils_1.convertCoordinate)(lngStart.slice(1), !lngStart.startsWith('+'), false),
+                    },
+                    endCoordinates: {
+                        latitude: (0, utils_1.convertCoordinate)(latEnd.slice(1), latEnd.startsWith('+'), true),
+                        longitude: (0, utils_1.convertCoordinate)(lngEnd.slice(1), !lngEnd.startsWith('+'), false),
+                    },
+                    description: description || undefined,
+                };
+                lapTimingPoints.push(lapTimingPoint);
+            }
+            this.currentIndex++;
+        }
+        return lapTimingPoints;
     }
     parseHeaderSection(header) {
         this.currentIndex++; // Skip [header] line

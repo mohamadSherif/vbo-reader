@@ -1,3 +1,16 @@
+export interface LapTimingPoint {
+  label: string;
+  startCoordinates: {
+    latitude: string;
+    longitude: string;
+  };
+  endCoordinates: {
+    latitude: string;
+    longitude: string;
+  };
+  description?: string;
+}
+
 export interface VBOHeader {
   creationDate: Date;
   vboxInfo: {
@@ -12,6 +25,7 @@ export interface VBOHeader {
   channelUnits?: string[];
   comments: string[];
   securityCode?: string;
+  lapTiming?: LapTimingPoint[];
 }
 
 export interface VBODataRow {
